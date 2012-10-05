@@ -1,0 +1,16 @@
+﻿<a href="/#">To to Catalog</a><br/>
+
+
+menu<br/>
+<ul data-bind="foreach : catalogMenu">
+    <li data-bind="css : { active : $parent.selectedItem() == Url }">
+        <a data-bind="text: Name, attr: { href: Url }"></a>
+    </li>
+</ul>
+<br/>
+
+
+<!-- ko with : content -->
+    <!-- ko template: { name: templateName, data: data } -->
+    <!-- /ko -->
+<!-- /ko -->

@@ -1,0 +1,158 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+@helper GetTemplate(string templateId)
+{
+    @Html.Action("GetTemplate", "Templates", new { templateId })
+}
+
+<html>
+<head>
+    <title>Index</title>
+   
+    @GetTemplate("_baseLayout")
+    @GetTemplate("_catalogLayout")
+     
+    @GetTemplate("dashbord")
+    @GetTemplate("templateList")
+    @GetTemplate("templateEdit")
+    @GetTemplate("mediaboxsetup")
+    <style type="text/css">
+        .active {
+            background-color: red;
+        }
+    </style>
+    <script src="@Url.Content("~/Scripts/jquery-1.8.2.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/knockout-2.1.0.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/sammy/sammy.min.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+        var app = $.sammy(function () {
+            var self = this;
+
+            self.screens = [];
+            self.NewScreen = function (screen) {
+                self.screens.push(screen);
+            };
+
+            self.layouts = [];
+            self.NewLayout = function (layout) {
+                self.layouts.push(layout);
+            };
+
+            self.content = ko.observable(null);
+
+            self.start = function () {
+
+                var roters = [];
+                $.map(self.screens, function (screen) {
+                    var action = function () {
+                        $.get(screen.url, this.params.toHash(), function (responseData) {
+
+                            
+
+                            var layout = ko.utils.arrayFirst(app.layouts, function (item) {
+                                return item.name == screen.layout;
+                            });
+
+                            layout = $.extend({
+                                content: ko.observable(null),
+                                template: layout.template
+                            }, new layout.init);
+                            
+                            if (screen.init)
+                                $.extend(responseData, new screen.init(responseData, layout));
+                            
+                            layout.content({
+                                templateName: screen.template,
+                                data: responseData
+                            });
+
+                            self.content({
+                                templateName: layout.template,
+                                data: layout
+                            });
+                        });
+                    };
+                    roters.push(['get', screen.hash, action]);
+                });
+
+                self.mapRoutes(roters);
+                self.run();
+            };
+
+
+        });
+        $(function () {
+            app.NewLayout({
+                name: 'BaseLayout',
+                template: '_baseLayout',
+                init: function () {
+
+                }
+            });
+
+            app.NewLayout({
+                name: 'CatalogLayout',
+                template: '_catalogLayout',
+                init: function () {
+                    var self = this;
+                    self.catalogMenu = ko.observableArray([]);
+                    self.selectedItem = ko.observable('#templates');
+                    $.get('@Url.Action("GetMenu")', '', self.catalogMenu);
+                }
+            });
+
+            app.NewScreen({
+                url: '@Url.Action("GetDashbord")',
+                hash: '/?',
+                layout: 'BaseLayout',
+                template: "dashbord"
+            });
+            app.NewScreen({
+                url: '@Url.Action("GetTemplatets")',
+                hash: '/?#templates',
+                layout: 'CatalogLayout',
+                template: "templateList",
+                init: function (data, layout) {
+                    var self = this;
+                    layout.selectedItem('#templates');
+                    self.goToEdit = function (item) {
+                        location.hash = '#templates/' + item.Id;
+                    };
+                }
+            });
+            app.NewScreen({
+                url: '@Url.Action("GetTemplate")',
+                hash: '/?#templates/:id',
+                layout: 'CatalogLayout',
+                template: "templateEdit",
+                init: function (data, layout) {
+                    layout.selectedItem('#templates');
+                }
+            });
+
+            app.NewScreen({
+                url: '@Url.Action("GetMediaBoxData")',
+                hash: '/?#mediaboxsetup',
+                layout: 'CatalogLayout',
+                template: "mediaboxsetup",
+                init: function (data, layout) {
+                    layout.selectedItem('#mediaboxsetup');
+                }
+            });
+            app.start();
+
+            ko.applyBindings(app);
+        });
+    </script>
+</head>
+<body>
+<!-- ko with : content -->
+    <!-- ko template: { name: templateName, data: data } -->
+    <!-- /ko -->
+<!-- /ko -->
+</body>
+</html>

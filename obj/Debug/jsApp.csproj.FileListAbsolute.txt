@@ -1,0 +1,7 @@
+D:\Work\js\jsApp\jsApp\jsApp\bin\jsApp.dll
+D:\Work\js\jsApp\jsApp\jsApp\bin\jsApp.pdb
+D:\Work\js\jsApp\jsApp\jsApp\bin\EntityFramework.dll
+D:\Work\js\jsApp\jsApp\jsApp\bin\EntityFramework.xml
+D:\Work\js\jsApp\jsApp\jsApp\obj\Debug\ResolveAssemblyReference.cache
+D:\Work\js\jsApp\jsApp\jsApp\obj\Debug\jsApp.dll
+D:\Work\js\jsApp\jsApp\jsApp\obj\Debug\jsApp.pdb
