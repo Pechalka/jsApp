@@ -37,7 +37,7 @@
             var self = this;
 
             self.screens = [];
-            self.NewScreen = function (screen) {
+            self.RegisterScreen = function (screen) {
                 self.screens.push(screen);
             };
 
@@ -54,11 +54,9 @@
                 $.map(self.screens, function (screen) {
                     var action = function () {
                         $.get(screen.url, this.params.toHash(), function (responseData) {
-
-
                             if (!screen.layout) {
-                                if (screen.init)
-                                    $.extend(responseData, new screen.init(responseData, null));
+                                if (screen.viewModel)
+                                    $.extend(responseData, new screen.viewModel(responseData, null));
                                 self.content({
                                     templateName: screen.template,
                                     data: responseData
@@ -71,10 +69,10 @@
                                 layout = $.extend({
                                     content: ko.observable(null),
                                     template: layout.template
-                                }, new layout.init);
+                                }, new layout.viewModel);
 
-                                if (screen.init)
-                                    $.extend(responseData, new screen.init(responseData, layout));
+                                if (screen.viewModel)
+                                    $.extend(responseData, new screen.viewModel(responseData, layout));
 
                                 layout.content({
                                     templateName: screen.template,
@@ -98,11 +96,12 @@
 
 
         });
+
         $(function () {
             app.NewLayout({
                 name: 'BaseLayout',
                 template: '_baseLayout',
-                init: function () {
+                viewModel: function () {
 
                 }
             });
@@ -110,7 +109,7 @@
             app.NewLayout({
                 name: 'CatalogLayout',
                 template: '_catalogLayout',
-                init: function () {
+                viewModel: function () {
                     var self = this;
                     self.catalogMenu = ko.observableArray([]);
                     self.selectedItem = ko.observable('#templates');
@@ -120,18 +119,18 @@
                 }
             });
 
-            app.NewScreen({
+            app.RegisterScreen({
                 url: '@Url.Action("GetMenu")',
                 hash: '/?',
                 layout: 'BaseLayout',
                 template: "dashbord"
             });
-            app.NewScreen({
+            app.RegisterScreen({
                 url: '@Url.Action("GetTemplatets")',
                 hash: '/?#templates',
                 layout: 'CatalogLayout',
                 template: "templateList",
-                init: function (data, layout) {
+                viewModel: function (data, layout) {
                     var self = this;
                     layout.selectedItem('#templates');
                     self.goToEdit = function (item) {
@@ -139,28 +138,28 @@
                     };
                 }
             });
-            app.NewScreen({
+            app.RegisterScreen({
                 url: '@Url.Action("GetTemplate")',
                 hash: '/?#templates/:id',
                 layout: 'CatalogLayout',
                 template: "templateEdit",
-                init: function (data, layout) {
+                viewModel: function (data, layout) {
                     layout.selectedItem('#templates');
                 }
             });
 
-            app.NewScreen({
+            app.RegisterScreen({
                 url: '@Url.Action("GettestData")',
                 hash: '/?#test',
                 template: "test"
             });
 
-            app.NewScreen({
+            app.RegisterScreen({
                 url: '@Url.Action("GetMediaBoxData")',
                 hash: '/?#mediaboxsetup',
                 layout: 'CatalogLayout',
                 template: "mediaboxsetup",
-                init: function (data, layout) {
+                viewModel: function (data, layout) {
                     layout.selectedItem('#mediaboxsetup');
                 }
             });
