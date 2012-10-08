@@ -40,7 +40,8 @@ namespace jsApp.Controllers
                             {
                                 new MenuItem {Name = "Letters templates", Url = "#templates"},
                                 new MenuItem {Name = "Media Box Setup", Url = "#mediaboxsetup"},
-                                new MenuItem {Name = "test", Url = "#test"}
+                                new MenuItem {Name = "test", Url = "#test"},
+                                new MenuItem{ Name = "static html", Url = "#staticHtml"}
                             };
             return Json(new { items }, JsonRequestBehavior.AllowGet);
         }
