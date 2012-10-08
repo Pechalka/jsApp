@@ -48,61 +48,31 @@
 
             self.content = ko.observable(null);
 
-            self.initWithoutRequest = function (screen) {
-                var screenData = {};
-                if (screen.viewModel)
-                    $.extend(screenData, new screen.viewModel(null, null));
-
-                if (!screen.layout) {
-                    return {
-                        templateName: screen.template,
-                        data: screenData
-                    };
-                } else {
-                    var layoutData = {// have content field any way, for bind screen
-                        content: ko.observable({
-                            templateName: screen.template,
-                            data: screenData
-                        })
-                    };
-                    if (layout.viewModel)//if layout have viewModel exteden it
-                        $.extend(layoutData, new layout.viewModel(null));
-
-                    return {
-                        templateName: layout.template,
-                        data: layoutData
-                    };
-                }
-            };
-
-            self.initWithRequest = function (screen, responseData) {
-                var screenData = responseData; // base view model is data from request
+            
+            self.init = function (screen, responseData) {
+                var screenData = responseData || {}, // base view model is data from request
+                    layout = screen.layout,
+                    layoutData = {};
                 
-                if (!screen.layout) {
-                    if (screen.viewModel)
-                        $.extend(screenData, new screen.viewModel(responseData, null)); //if have custom viewmodel extend, layout is null
+                if (layout && layout.viewModel)
+                    layoutData = new layout.viewModel(responseData);
 
-                    return {
-                        templateName: screen.template,
-                        data: screenData
-                    };
-                } else {
+                if (screen.viewModel)
+                    $.extend(screenData, new screen.viewModel(responseData, layoutData)); //if have custom viewmodel extend, layout is null
 
-                    var layout = screen.layout,
-                        layoutData = layout.viewModel ? new layout.viewModel(responseData) : {};
-
-                    if (screen.viewModel)
-                        $.extend(screenData, new screen.viewModel(responseData, layoutData)); //if have custom viewmodel extend, layout is null
-
-                    layoutData.content = ko.observable({
-                        templateName: screen.template,
-                        data: screenData
-                    });
+                var screenSection = {
+                    templateName: screen.template,
+                    data: screenData
+                };
+                if (layout) {
+                    layoutData.content = ko.observable(screenSection);
 
                     return {
                         templateName: layout.template,
                         data: layoutData
                     };
+                } else {
+                    return screenSection;
                 }
             };
 
@@ -113,12 +83,12 @@
                     var action = function () {
                         if (screen.dataUrl) {
                             $.get(screen.dataUrl, this.params.toHash(), function (responseData) {
-                                var page = self.initWithRequest(screen, responseData);
+                                var page = self.init(screen, responseData);
                                 self.content(page);
                             });
                         } else {
-                            var page = self.initWithoutRequest(screen);
-                            self.content(page);    
+                            var page = self.init(screen, null);
+                            self.content(page);
                         }
                     };
                     roters.push(['get', screen.hash, action]);
