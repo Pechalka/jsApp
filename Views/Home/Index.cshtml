@@ -82,7 +82,7 @@
 
             self.laodIfNeed = function (templateId) {
                 if ($('#' + templateId).length == 0) {
-                    $.ajax({//https://groups.google.com/forum/?fromgroups=#!topic/knockoutjs/_YJwSs5ZwaE todo:timeout
+                    $.ajax({//https://groups.google.com/forum/?fromgroups=#!topic/knockoutjs/_YJwSs5ZwaE todo: Deferred, timeout
                         url: '@Url.Action("GetTemplate", "Templates")',
                         async: false,//!!!
                         dataType: "html",
