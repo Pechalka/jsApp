@@ -36,7 +36,7 @@
         //todo:
         // refactoring  start method
         // lazy loading for templates
-        // static html
+        // static html +
 
         var app = $.sammy(function () {
             var self = this;
@@ -48,77 +48,85 @@
 
             self.content = ko.observable(null);
 
+            self.initWithoutRequest = function (screen) {
+                var screenData = {};
+                if (screen.viewModel)
+                    $.extend(screenData, new screen.viewModel(null, null));
+
+                if (!screen.layout) {
+                    return {
+                        templateName: screen.template,
+                        data: screenData
+                    };
+                } else {
+                    var layoutData = {// have content field any way, for bind screen
+                        content: ko.observable({
+                            templateName: screen.template,
+                            data: screenData
+                        })
+                    };
+                    if (layout.viewModel)//if layout have viewModel exteden it
+                        $.extend(layoutData, new layout.viewModel(null));
+
+                    return {
+                        templateName: layout.template,
+                        data: layoutData
+                    };
+                }
+            };
+
+            self.initWithRequest = function (screen, responseData) {
+                var screenData = responseData; // base view model is data from request
+                
+                if (!screen.layout) {
+                    if (screen.viewModel)
+                        $.extend(screenData, new screen.viewModel(responseData, null)); //if have custom viewmodel extend, layout is null
+
+                    return {
+                        templateName: screen.template,
+                        data: screenData
+                    };
+                } else {
+
+                    var layout = screen.layout,
+                        layoutData = layout.viewModel ? new layout.viewModel(responseData) : {};
+
+                    if (screen.viewModel)
+                        $.extend(screenData, new screen.viewModel(responseData, layoutData)); //if have custom viewmodel extend, layout is null
+
+                    layoutData.content = ko.observable({
+                        templateName: screen.template,
+                        data: screenData
+                    });
+
+                    return {
+                        templateName: layout.template,
+                        data: layoutData
+                    };
+                }
+            };
+
             self.start = function () {
 
                 var roters = [];
                 $.map(self.screens, function (screen) {
                     var action = function () {
-                        if (!screen.dataUrl) {
-                            var screenData = {};
-                            if (screen.viewModel)
-                                $.extend(screenData, new screen.viewModel(null, null));
-
-                            if (!screen.layout) {
-                                self.content({
-                                    templateName: screen.template,
-                                    data: screenData
-                                });
-                            } else {
-                                var layoutData = {// have content field any way, for bind screen
-                                    content: ko.observable({
-                                        templateName: screen.template,
-                                        data: screenData
-                                    })
-                                };
-                                if (layout.viewModel)//if layout have viewModel exteden it
-                                    $.extend(layoutData, new layout.viewModel(null));
-
-                                self.content({
-                                    templateName: layout.template,
-                                    data: layoutData
-                                });
-                            }
-
-
-                            return;
+                        if (screen.dataUrl) {
+                            $.get(screen.dataUrl, this.params.toHash(), function (responseData) {
+                                var page = self.initWithRequest(screen, responseData);
+                                self.content(page);
+                            });
+                        } else {
+                            var page = self.initWithoutRequest(screen);
+                            self.content(page);    
                         }
-                        $.get(screen.dataUrl, this.params.toHash(), function (responseData) {
-                            if (!screen.layout) {
-                                var screenData = responseData; // base view model is data from request
-                                if (screen.viewModel)
-                                    $.extend(screenData, new screen.viewModel(responseData, null)); //if have custom viewmodel extend, layout is null
-
-                                self.content({
-                                    templateName: screen.template,
-                                    data: screenData
-                                });
-                            } else {
-
-                                var layout = screen.layout,
-                                    layoutData = layout.viewModel ? new layout.viewModel(responseData) : {};
-
-                                var screenData = responseData; // base view model is data from request
-                                if (screen.viewModel)
-                                    $.extend(screenData, new screen.viewModel(responseData, layoutData)); //if have custom viewmodel extend, layout is null
-
-                                layoutData.content = ko.observable({
-                                    templateName: screen.template,
-                                    data: screenData
-                                });
-
-                                self.content({
-                                    templateName: layout.template,
-                                    data: layoutData
-                                });
-                            }
-                        });
-
                     };
                     roters.push(['get', screen.hash, action]);
                 });
 
                 self.mapRoutes(roters);
                 self.run();
+                ko.applyBindings(self);
             };
 
 
@@ -128,9 +136,6 @@
             this.template = templateName;
             this.viewModel = viewModel;
         };
-
-        var Abe = {};
-        Abe.Layouts = { };
 
         $(function () {
             var BaseLayout = new Layout('_baseLayout');
@@ -191,14 +196,14 @@
             app.RegisterScreen({
                 hash: '/?#staticHtml',
                 template: "statichtml",
-                viewModel: function () {
+                viewModel: function () { 
                     this.age = 12;
                 }
             });
 
             app.start();
 
-            ko.applyBindings(app);
+            
         });
     </script>
 </head>

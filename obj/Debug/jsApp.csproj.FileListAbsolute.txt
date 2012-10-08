@@ -5,3 +5,9 @@ D:\Work\js\jsApp\jsApp\jsApp\bin\EntityFramework.xml
 D:\Work\js\jsApp\jsApp\jsApp\obj\Debug\ResolveAssemblyReference.cache
 D:\Work\js\jsApp\jsApp\jsApp\obj\Debug\jsApp.dll
 D:\Work\js\jsApp\jsApp\jsApp\obj\Debug\jsApp.pdb
+c:\Work\js\jsApp\bin\jsApp.dll
+c:\Work\js\jsApp\bin\jsApp.pdb
+c:\Work\js\jsApp\bin\EntityFramework.xml
+c:\Work\js\jsApp\obj\Debug\ResolveAssemblyReference.cache
+c:\Work\js\jsApp\obj\Debug\jsApp.dll
+c:\Work\js\jsApp\obj\Debug\jsApp.pdb
