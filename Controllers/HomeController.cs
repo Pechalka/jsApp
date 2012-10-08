@@ -32,29 +32,27 @@ namespace jsApp.Controllers
             return Json(TemplatesService.GetBy(id), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetDashbord()
-        {
-            var items = new List<MenuItem>
-                            {
-                                new MenuItem{ Name = "Letters templates", Url = "#templates"},
-                                new MenuItem{ Name = "Media Box Setup", Url = "#mediaboxsetup"}
-                            };
-            return Json(new { items }, JsonRequestBehavior.AllowGet);
-        }
+
 
         public ActionResult GetMenu()
         {
             var items = new List<MenuItem>
                             {
                                 new MenuItem {Name = "Letters templates", Url = "#templates"},
-                                new MenuItem {Name = "Media Box Setup", Url = "#mediaboxsetup"}
+                                new MenuItem {Name = "Media Box Setup", Url = "#mediaboxsetup"},
+                                new MenuItem {Name = "test", Url = "#test"}
                             };
-            return Json(items, JsonRequestBehavior.AllowGet);
+            return Json(new { items }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetMediaBoxData()
         {
             return Json("hello", JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GettestData()
+        {
+            return Json(new { name = "Peta"}, JsonRequestBehavior.AllowGet);
         }
     }
 }

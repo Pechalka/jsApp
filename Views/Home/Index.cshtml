@@ -20,6 +20,10 @@
     @GetTemplate("templateList")
     @GetTemplate("templateEdit")
     @GetTemplate("mediaboxsetup")
+    
+    @GetTemplate("test")
+    
+
     <style type="text/css">
         .active {
             background-color: red;
@@ -51,30 +55,39 @@
                     var action = function () {
                         $.get(screen.url, this.params.toHash(), function (responseData) {
 
-                            
 
-                            var layout = ko.utils.arrayFirst(app.layouts, function (item) {
-                                return item.name == screen.layout;
-                            });
+                            if (!screen.layout) {
+                                if (screen.init)
+                                    $.extend(responseData, new screen.init(responseData, null));
+                                self.content({
+                                    templateName: screen.template,
+                                    data: responseData
+                                });
+                            } else {
+                                var layout = ko.utils.arrayFirst(app.layouts, function(item) {
+                                    return item.name == screen.layout;
+                                });
 
-                            layout = $.extend({
-                                content: ko.observable(null),
-                                template: layout.template
-                            }, new layout.init);
-                            
-                            if (screen.init)
-                                $.extend(responseData, new screen.init(responseData, layout));
-                            
-                            layout.content({
-                                templateName: screen.template,
-                                data: responseData
-                            });
+                                layout = $.extend({
+                                    content: ko.observable(null),
+                                    template: layout.template
+                                }, new layout.init);
 
-                            self.content({
-                                templateName: layout.template,
-                                data: layout
-                            });
+                                if (screen.init)
+                                    $.extend(responseData, new screen.init(responseData, layout));
+
+                                layout.content({
+                                    templateName: screen.template,
+                                    data: responseData
+                                });
+
+                                self.content({
+                                    templateName: layout.template,
+                                    data: layout
+                                });
+                            }
                         });
+                            
                     };
                     roters.push(['get', screen.hash, action]);
                 });
@@ -101,12 +114,14 @@
                     var self = this;
                     self.catalogMenu = ko.observableArray([]);
                     self.selectedItem = ko.observable('#templates');
-                    $.get('@Url.Action("GetMenu")', '', self.catalogMenu);
+                    $.get('@Url.Action("GetMenu")', '', function (data) {
+                        self.catalogMenu(data.items);
+                    });
                 }
             });
 
             app.NewScreen({
-                url: '@Url.Action("GetDashbord")',
+                url: '@Url.Action("GetMenu")',
                 hash: '/?',
                 layout: 'BaseLayout',
                 template: "dashbord"
@@ -132,6 +147,12 @@
                 init: function (data, layout) {
                     layout.selectedItem('#templates');
                 }
+            });
+
+            app.NewScreen({
+                url: '@Url.Action("GettestData")',
+                hash: '/?#test',
+                template: "test"
             });
 
             app.NewScreen({
