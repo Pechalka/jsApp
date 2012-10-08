@@ -41,11 +41,6 @@
                 self.screens.push(screen);
             };
 
-            self.layouts = [];
-            self.NewLayout = function (layout) {
-                self.layouts.push(layout);
-            };
-
             self.content = ko.observable(null);
 
             self.start = function () {
@@ -62,18 +57,20 @@
                                     data: responseData
                                 });
                             } else {
-                                var layout = ko.utils.arrayFirst(app.layouts, function(item) {
-                                    return item.name == screen.layout;
-                                });
+                                
+                                var layout = screen.layout;
+                                var layoutViewModel = layout.viewModel || function () { };
+                                var layoutData = new layoutViewModel();
 
                                 layout = $.extend({
                                     content: ko.observable(null),
                                     template: layout.template
-                                }, new layout.viewModel);
+                                }, layoutData);
 
-                                if (screen.viewModel)
-                                    $.extend(responseData, new screen.viewModel(responseData, layout));
 
+                                if (screen.viewModel) {
+                                    $.extend(responseData, new screen.viewModel(responseData, layoutData));
+                                }
                                 layout.content({
                                     templateName: screen.template,
                                     data: responseData
@@ -85,7 +82,7 @@
                                 });
                             }
                         });
-                            
+
                     };
                     roters.push(['get', screen.hash, action]);
                 });
@@ -97,38 +94,35 @@
 
         });
 
+        var Layout = function (templateName, viewModel) {
+            this.template = templateName;
+            this.viewModel = viewModel;
+        };
+
+        var Abe = {};
+        Abe.Layouts = { };
+
         $(function () {
-            app.NewLayout({
-                name: 'BaseLayout',
-                template: '_baseLayout',
-                viewModel: function () {
-
-                }
-            });
-
-            app.NewLayout({
-                name: 'CatalogLayout',
-                template: '_catalogLayout',
-                viewModel: function () {
-                    var self = this;
-                    self.catalogMenu = ko.observableArray([]);
-                    self.selectedItem = ko.observable('#templates');
-                    $.get('@Url.Action("GetMenu")', '', function (data) {
-                        self.catalogMenu(data.items);
-                    });
-                }
+            var BaseLayout = new Layout('_baseLayout');
+            var CatalogLayout = new Layout('_catalogLayout', function () {
+                var self = this;
+                self.catalogMenu = ko.observableArray([]);
+                self.selectedItem = ko.observable('#templates');
+                $.get('@Url.Action("GetMenu")', '', function (data) {
+                    self.catalogMenu(data.items);
+                });
             });
 
             app.RegisterScreen({
                 url: '@Url.Action("GetMenu")',
                 hash: '/?',
-                layout: 'BaseLayout',
+                layout: BaseLayout,
                 template: "dashbord"
             });
             app.RegisterScreen({
                 url: '@Url.Action("GetTemplatets")',
                 hash: '/?#templates',
-                layout: 'CatalogLayout',
+                layout: CatalogLayout,
                 template: "templateList",
                 viewModel: function (data, layout) {
                     var self = this;
@@ -141,7 +135,7 @@
             app.RegisterScreen({
                 url: '@Url.Action("GetTemplate")',
                 hash: '/?#templates/:id',
-                layout: 'CatalogLayout',
+                layout: CatalogLayout,
                 template: "templateEdit",
                 viewModel: function (data, layout) {
                     layout.selectedItem('#templates');
@@ -157,7 +151,7 @@
             app.RegisterScreen({
                 url: '@Url.Action("GetMediaBoxData")',
                 hash: '/?#mediaboxsetup',
-                layout: 'CatalogLayout',
+                layout: CatalogLayout,
                 template: "mediaboxsetup",
                 viewModel: function (data, layout) {
                     layout.selectedItem('#mediaboxsetup');
