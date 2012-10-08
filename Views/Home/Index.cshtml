@@ -57,67 +57,58 @@
                             var screenData = {};
                             if (screen.viewModel)
                                 $.extend(screenData, new screen.viewModel(null, null));
-                            
+
                             if (!screen.layout) {
                                 self.content({
                                     templateName: screen.template,
                                     data: screenData
                                 });
                             } else {
-                                var layout = screen.layout,
-                                    layoutViewModel = layout.viewModel || function () { },
-                                    layoutData = new layoutViewModel();
-
-                                layout = $.extend({
-                                    content: ko.observable(null),
-                                    template: layout.template
-                                }, layoutData);
-                                
-                                layout.content({
-                                    templateName: screen.template,
-                                    data: screenData
-                                });
+                                var layoutData = {// have content field any way, for bind screen
+                                    content: ko.observable({
+                                        templateName: screen.template,
+                                        data: screenData
+                                    })
+                                };
+                                if (layout.viewModel)//if layout have viewModel exteden it
+                                    $.extend(layoutData, new layout.viewModel(null));
 
                                 self.content({
                                     templateName: layout.template,
-                                    data: layout
+                                    data: layoutData
                                 });
                             }
-                            
+
 
                             return;
                         }
                         $.get(screen.dataUrl, this.params.toHash(), function (responseData) {
                             if (!screen.layout) {
+                                var screenData = responseData; // base view model is data from request
                                 if (screen.viewModel)
-                                    $.extend(responseData, new screen.viewModel(responseData, null));
+                                    $.extend(screenData, new screen.viewModel(responseData, null)); //if have custom viewmodel extend, layout is null
+
                                 self.content({
                                     templateName: screen.template,
-                                    data: responseData
+                                    data: screenData
                                 });
                             } else {
 
                                 var layout = screen.layout,
-                                    layoutViewModel = layout.viewModel || function () { },
-                                    layoutData = new layoutViewModel(responseData);
+                                    layoutData = layout.viewModel ? new layout.viewModel(responseData) : {};
 
-                                layout = $.extend({
-                                    content: ko.observable(null),
-                                    template: layout.template
-                                }, layoutData);
+                                var screenData = responseData; // base view model is data from request
+                                if (screen.viewModel)
+                                    $.extend(screenData, new screen.viewModel(responseData, layoutData)); //if have custom viewmodel extend, layout is null
 
-
-                                if (screen.viewModel) {
-                                    $.extend(responseData, new screen.viewModel(responseData, layoutData));
-                                }
-                                layout.content({
+                                layoutData.content = ko.observable({
                                     templateName: screen.template,
-                                    data: responseData
+                                    data: screenData
                                 });
 
                                 self.content({
                                     templateName: layout.template,
-                                    data: layout
+                                    data: layoutData
                                 });
                             }
                         });
