@@ -13,7 +13,7 @@
 <head>
     <title>Index</title>
    
-    @GetTemplate("_baseLayout")
+@*    @GetTemplate("_baseLayout")
     @GetTemplate("_catalogLayout")
      
     @GetTemplate("dashbord")
@@ -22,7 +22,7 @@
     @GetTemplate("mediaboxsetup")
     
     @GetTemplate("test")
-       @GetTemplate("statichtml")
+       @GetTemplate("statichtml")*@
 
     <style type="text/css">
         .active {
@@ -34,8 +34,9 @@
     <script src="@Url.Content("~/Scripts/sammy/sammy.min.js")" type="text/javascript"></script>
     <script type="text/javascript">
         //todo:
-        // refactoring  start method
-        // lazy loading for templates
+        // lazy loading for templates +
+        // bot call layout vm is layout not change
+        // refactoring  start method +
         // static html +
 
         var app = $.sammy(function () {
@@ -48,24 +49,27 @@
 
             self.content = ko.observable(null);
 
-            
+
             self.init = function (screen, responseData) {
-                var screenData = responseData || {}, // base view model is data from request
+                var screenData = responseData || {}, // base vm for srceen is data from request or empty object
                     layout = screen.layout,
                     layoutData = {};
-                
-                if (layout && layout.viewModel)
+
+                if (layout && layout.viewModel) //if screen have layout with custome vm, creates it, else vm for layout empty object
                     layoutData = new layout.viewModel(responseData);
 
-                if (screen.viewModel)
-                    $.extend(screenData, new screen.viewModel(responseData, layoutData)); //if have custom viewmodel extend, layout is null
+                if (screen.viewModel)//if screen have vm create it, sent response data and vm layout in screen for init
+                    $.extend(screenData, new screen.viewModel(responseData, layoutData));
 
+                self.laodIfNeed(screen.template);//load template 
                 var screenSection = {
                     templateName: screen.template,
                     data: screenData
                 };
-                if (layout) {
-                    layoutData.content = ko.observable(screenSection);
+                if (layout) {//if screen have layout
+                    layoutData.content = ko.observable(screenSection); // layout vm should contain content observable, for render screen inside
+
+                    self.laodIfNeed(layout.template); //load template 
 
                     return {
                         templateName: layout.template,
@@ -73,6 +77,19 @@
                     };
                 } else {
                     return screenSection;
+                }
+            };
+
+            self.laodIfNeed = function (templateId) {
+                if ($('#' + templateId).length == 0) {
+                    $.ajax({//https://groups.google.com/forum/?fromgroups=#!topic/knockoutjs/_YJwSs5ZwaE todo:timeout
+                        url: '@Url.Action("GetTemplate", "Templates")',
+                        async: false,//!!!
+                        dataType: "html",
+                        data : { templateId: templateId },
+                        type: "GET",
+                        success: function (template) { $("body").append(template); }
+                    });
                 }
             };
 

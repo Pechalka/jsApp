@@ -6,6 +6,7 @@ namespace jsApp.Controllers
     {
         public ActionResult GetTemplate(string templateId)
         {
+           // Response.ContentType = "text/plan";
             return PartialView((object) templateId);
         }
 
