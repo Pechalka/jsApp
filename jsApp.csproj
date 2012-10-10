@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\TemplatesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -77,7 +76,7 @@
     <Content Include="js\main.js" />
     <Content Include="js\buildPage.js" />
     <Content Include="js\app.js" />
-    <Content Include="js\ViewModel.js" />
+    <Content Include="js\Screen.js" />
     <Content Include="js\viewModels\mediaboxsetup.js" />
     <Content Include="js\viewModels\statichtml.js" />
     <Content Include="js\viewModels\templateEdit.js" />
