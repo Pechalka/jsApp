@@ -71,12 +71,21 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="js\buildPage.js" />
     <Content Include="js\layouts\baseLayout.js" />
     <Content Include="js\layouts\catalogLayout.js" />
     <Content Include="js\main.js" />
-    <Content Include="js\buildPage.js" />
-    <Content Include="js\app.js" />
     <Content Include="js\Screen.js" />
+    <Content Include="js\app.js" />
+    <Content Include="js\stringTemplateEngine.js" />
+    <Content Include="js\templates\dashbord.html" />
+    <Content Include="js\templates\mediaboxsetup.html" />
+    <Content Include="js\templates\statichtml.html" />
+    <Content Include="js\templates\templateEdit.html" />
+    <Content Include="js\templates\templateList.html" />
+    <Content Include="js\templates\test.html" />
+    <Content Include="js\templates\_baseLayout.html" />
+    <Content Include="js\templates\_catalogLayout.html" />
     <Content Include="js\viewModels\mediaboxsetup.js" />
     <Content Include="js\viewModels\statichtml.js" />
     <Content Include="js\viewModels\templateEdit.js" />
@@ -178,28 +187,28 @@
     <Content Include="Views\Shared\GetTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="js\templates\_baseLayout.html" />
+    <Content Include="Views\Templates\templateList.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="js\templates\test.html" />
+    <Content Include="Views\Templates\templateEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="js\templates\_catalogLayout.html" />
+    <Content Include="Views\Templates\mediaboxsetup.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="js\templates\dashbord.html" />
+    <Content Include="Views\Templates\dashbord.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="js\templates\mediaboxsetup.html" />
+    <Content Include="Views\Templates\_catalogLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="js\templates\statichtml.html" />
+    <Content Include="Views\Templates\_baseLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="js\templates\templateEdit.html" />
+    <Content Include="Views\Templates\test.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="js\templates\templateList.html" />
+    <Content Include="Views\Templates\statichtml.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
