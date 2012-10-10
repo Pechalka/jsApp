@@ -76,7 +76,7 @@
     <Content Include="js\layouts\baseLayout.js" />
     <Content Include="js\layouts\catalogLayout.js" />
     <Content Include="js\main.js" />
-    <Content Include="js\Screen.js" />
+    <Content Include="js\buildPage.js" />
     <Content Include="js\app.js" />
     <Content Include="js\ViewModel.js" />
     <Content Include="js\viewModels\mediaboxsetup.js" />
@@ -202,6 +202,30 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Templates\statichtml.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="js\templates\_baseLayout.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="js\templates\test.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="js\templates\_catalogLayout.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="js\templates\dashbord.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="js\templates\mediaboxsetup.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="js\templates\statichtml.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="js\templates\templateEdit.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="js\templates\templateList.html" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

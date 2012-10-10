@@ -4,10 +4,14 @@ namespace jsApp.Controllers
 {
     public class TemplatesController : Controller
     {
-        public ActionResult GetTemplate(string templateId)
+        public ActionResult GetTemplate(string id)
         {
-           // Response.ContentType = "text/plan";
-            return PartialView((object) templateId);
+            return PartialView((object)id);
+        }
+
+        public ActionResult GetTemplateText(string id)
+        {
+            return PartialView(id);
         }
 
     }
