@@ -1,3 +1,5 @@
-﻿define(["/js/Layout.js"], function (Layout) {
-    return new Layout('_baseLayout');
+﻿define([], function () {
+    return function () {
+        var self = this;
+    };
 });

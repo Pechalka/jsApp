@@ -72,7 +72,6 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="js\Layout.js" />
     <Content Include="js\layouts\baseLayout.js" />
     <Content Include="js\layouts\catalogLayout.js" />
     <Content Include="js\main.js" />
@@ -178,30 +177,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\GetTemplate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Templates\templateList.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Templates\templateEdit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Templates\mediaboxsetup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Templates\dashbord.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Templates\_catalogLayout.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Templates\_baseLayout.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Templates\test.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Templates\statichtml.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="js\templates\_baseLayout.html" />
