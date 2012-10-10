@@ -72,8 +72,22 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="js\Layout.js" />
+    <Content Include="js\layouts\baseLayout.js" />
+    <Content Include="js\layouts\catalogLayout.js" />
+    <Content Include="js\main.js" />
+    <Content Include="js\Screen.js" />
     <Content Include="js\app.js" />
+    <Content Include="js\ViewModel.js" />
+    <Content Include="js\viewModels\mediaboxsetup.js" />
+    <Content Include="js\viewModels\statichtml.js" />
+    <Content Include="js\viewModels\templateEdit.js" />
+    <Content Include="js\viewModels\templateList.js" />
     <Content Include="README.jQuery.vsdoc.txt" />
+    <Content Include="Require.JS - LICENSE.txt" />
+    <Content Include="Scripts\cs.js" />
+    <Content Include="Scripts\domReady.js" />
+    <Content Include="Scripts\i18n.js" />
     <Content Include="Scripts\jquery-1.8.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -84,6 +98,9 @@
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Scripts\r.js" />
+    <Content Include="Scripts\require.js" />
+    <Content Include="Scripts\require.min.js" />
     <Content Include="Scripts\sammy\sammy.cache.js" />
     <Content Include="Scripts\sammy\sammy.cache.min.js" />
     <Content Include="Scripts\sammy\sammy.data_location_proxy.js" />
@@ -127,6 +144,7 @@
     <Content Include="Scripts\sammy\sammy.title.min.js" />
     <Content Include="Scripts\sammy\sammy.tmpl.js" />
     <Content Include="Scripts\sammy\sammy.tmpl.min.js" />
+    <Content Include="Scripts\text.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -150,7 +168,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="js\NewFolder1\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
